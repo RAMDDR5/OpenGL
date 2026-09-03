@@ -2,14 +2,14 @@
 this isnt a professional project so use it at your own risk.
 # Setting it up
 ```sh
-sudo apt install gcc make
+./run.sh -id # for debian
 # or
-sudo pacman -S gcc make
+./run.sh -ia # for arch
 
 # clone
 git clone https://github.com/RAMDDR5/OpenGL.git
 cd OpenGL
 
 # compile
-make -f .Makefile
+./run.sh -c
 ```
