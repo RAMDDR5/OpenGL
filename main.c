@@ -31,13 +31,15 @@ int main(void) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	GLfloat vertices[] = {
-		TRIANGLE_TOP,			KREMA_PURPLE,
-		TRIANGLE_LEFT,			KREMA_GREEN,
-		TRIANGLE_RIGHT,			KREMA_ORANGE
+		SQUARE_TOP_LEFT,		CHLORINE_BLUE,
+		SQUARE_TOP_RIGHT,		KREMA_PURPLE,
+		SQUARE_BOTTOM_RIGHT,	KREMA_ORANGE,
+		SQUARE_BOTTOM_LEFT,		KREMA_GREEN
 	};
 
 	GLuint indices[] = {
-		0, 1, 2 
+		0, 1, 2,
+		0, 3, 2
 	};
 
 	GLFWwindow *window = glfwCreateWindow(800, 800, "ObamaGL", NULL, NULL);
