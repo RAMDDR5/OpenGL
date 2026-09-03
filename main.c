@@ -102,9 +102,7 @@ int main(void) {
 	UnbindVBO();
 	UnbindEBO();
 
-	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale"); 
-
-	Texture imageTexture = CreateTexture("image.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE, GL_LINEAR);
+	Texture imageTexture = CreateTexture("image.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE, GL_LINEAR);
 
 	texUnit(shaderProgram, "tex0", 0);
 
@@ -119,12 +117,11 @@ int main(void) {
 		glfwGetWindowSize(window, &windowWidth, &windowHeight);
 		glViewport(0, 0, windowWidth, windowHeight);
 
-
 		ActivateShader(shaderProgram);
 
 		double crntTime = glfwGetTime();
 		if (crntTime - prevTime >= 1 / 60) {
-			rotation += 0.5f;
+			rotation += 2.0f;
 			prevTime = crntTime;
 		}
 
@@ -137,7 +134,7 @@ int main(void) {
 		glm_mat4_identity(proj);
 
 		glm_rotate(model, glm_rad(rotation), (vec3){0.0f, 1.0f, 0.0f});
-		glm_translate(view, (vec3){0.0, -0.5f, -6.0});
+		glm_translate(view, (vec3){0.0, 0.0f, -6.0});
 		glm_perspective(glm_rad(45.0f), (float)windowWidth/windowHeight, 0.1f, 100.0f, proj);
 
 		int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
@@ -149,8 +146,6 @@ int main(void) {
 		int projLoc = glGetUniformLocation(shaderProgram.ID, "proj");
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, (float*)proj);
 
-
-		glUniform1f(uniID, 0.5f);
 		BindTexture(imageTexture);
 
 		BindVAO(VAO1);

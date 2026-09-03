@@ -51,6 +51,9 @@ Shader CreateShader(const char* vertexFile, const char* fragmentFile) {
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	free(vertexSource);
+	free(fragmentSource);
+
 	return s;
 }
 
