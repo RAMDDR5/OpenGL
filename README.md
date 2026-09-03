@@ -1,5 +1,7 @@
 # My first OpenGL project, and a template for myself
 this isnt a professional project so use it at your own risk.
+# AI use
+I wrote everything myself but when i couldnt find the errors i did use opencode which is like claude code to spot errors that i fixed myself
 # Setting it up
 ```sh
 ./run.sh -id # for debian
