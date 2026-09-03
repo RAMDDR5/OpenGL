@@ -1,14 +1,15 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-
 #include "headers/shapes.h"
 #include "headers/shader.h"
 #include "headers/VBO.h"
 #include "headers/EBO.h"
 #include "headers/VAO.h"
+#include "headers/texture.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 #define VERSION_MAJOR	4
 #define VERSION_MINOR	6
@@ -66,30 +67,8 @@ int main(void) {
 
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale"); 
 
-	int imageWidth, imageHeight, numColCh;
-	stbi_set_flip_vertically_on_load(1);
-	unsigned char *bytes = stbi_load("image.png", &imageWidth, &imageHeight, &numColCh, 0);
-
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	stbi_image_free(bytes);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
-	ActivateShader(shaderProgram);
-
-	glUniform1i(tex0Uni, 0);
+	Texture imageTexture = CreateTexture("image.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE, GL_LINEAR);	
+	texUnit(shaderProgram, "tex0", 0);
 
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
@@ -99,7 +78,7 @@ int main(void) {
 
 		ActivateShader(shaderProgram);
 		glUniform1f(uniID, 0.5f);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		BindTexture(imageTexture);
 
 		BindVAO(VAO1);
 	
@@ -115,7 +94,7 @@ int main(void) {
 	DeleteVBO(VBO1);
 	DeleteEBO(EBO1);
 	DeleteShader(shaderProgram);
-	glDeleteTextures(1, &texture);
+	DeleteTexture(imageTexture);
 
 	glfwDestroyWindow(window); 
 	glfwTerminate();
