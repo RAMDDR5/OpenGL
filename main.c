@@ -1,9 +1,8 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
+#include <sys/stat.h>
 
-#include "cglm/affine-pre.h"
-#include "cglm/cam.h"
 #include "cglm/mat4.h"
 //#include "headers/shapes.h"
 #include "cglm/util.h"
@@ -85,6 +84,9 @@ int main(void) {
 
 	gladLoadGL(glfwGetProcAddress);
 
+	struct stat vstat, fstat;
+	stat("headers/default.vert", &vstat);
+	stat("headers/default.frag", &fstat);
 	Shader shaderProgram = CreateShader("headers/default.vert", "headers/default.frag");
 
 	VAO VAO1 = CreateVAO();
@@ -117,6 +119,16 @@ int main(void) {
 		glfwGetWindowSize(window, &windowWidth, &windowHeight);
 		glViewport(0, 0, windowWidth, windowHeight);
 
+		struct stat new_vstat, new_fstat;
+		stat("headers/default.vert", &new_vstat);
+		stat("headers/default.frag", &new_fstat);
+		if (new_vstat.st_mtime != vstat.st_mtime || new_fstat.st_mtime != fstat.st_mtime) {
+			DeleteShader(shaderProgram);
+			shaderProgram = CreateShader("headers/default.vert", "headers/default.frag");
+			ActivateShader(shaderProgram);
+			vstat = new_vstat;
+			fstat = new_fstat;
+		}
 		ActivateShader(shaderProgram);
 
 		double crntTime = glfwGetTime();
